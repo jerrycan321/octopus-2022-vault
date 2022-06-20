@@ -6,12 +6,10 @@ step "Create tenant namespace" {
     action {
         action_type = "Octopus.KubernetesRunScript"
         properties = {
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                kubectl create namespace $OctopusParameters["Octopus.Deployment.Tenant.Name"]-$OctopusParameters["Octopus.Environment.Name"]
-                
-            EOT
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Script.ScriptBody = "kubectl create namespace $(get_octopusvariable \"Octopus.Deployment.Tenant.Name\")-$(get_octopusvariable \"Octopus.Environment.Name\")"
             Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
+            Octopus.Action.Script.Syntax = "Bash"
         }
         worker_pool_variable = ""
     }
