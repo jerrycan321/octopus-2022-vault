@@ -1,3 +1,22 @@
+step "Create tenant namespace" {
+    properties = {
+        Octopus.Action.TargetRoles = "k8s"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesRunScript"
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                kubectl create namespace $OctopusParameters["Octopus.Deployment.Tenant.Name"]-$OctopusParameters["Octopus.Environment.Name"]
+                
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool_variable = ""
+    }
+}
+
 step "Upgrade a Helm Chart" {
     properties = {
         Octopus.Action.TargetRoles = "k8s"
@@ -8,8 +27,8 @@ step "Upgrade a Helm Chart" {
         is_required = true
         properties = {
             Octopus.Action.Helm.ClientVersion = "V3"
-            Octopus.Action.Helm.Namespace = "#{Octopus.Deployment.Tenant.Name | ToLower}-#{Octopus.Environment.Name | ToLower}"
-            Octopus.Action.Helm.ReleaseName = "#{Octopus.Deployment.Tenant.Name | ToLower}-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Helm.Namespace = "#{Octopus.Deployment.Tenant.Name}-#{Octopus.Environment.Name}"
+            Octopus.Action.Helm.ReleaseName = "#{Octopus.Deployment.Tenant.Name}-#{Octopus.Environment.Name}"
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Helm Hashicorp"
