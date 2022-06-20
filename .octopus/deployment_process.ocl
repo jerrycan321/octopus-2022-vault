@@ -12,7 +12,9 @@ step "Create tenant namespace" {
                 ENVIRONMENT=`echo $(get_octopusvariable "Octopus.Environment.Name") | tr [A-Z [a-z]`
                 NAMESPACE=${TENANT}-${ENVIRONMENT}
                 echo "Creating Namespace  ${NAMESPACE}"
-                kubectl create namespace ${NAMESPACE}
+                # Create the namespace if it does not exist.
+                kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -
+                
             EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
