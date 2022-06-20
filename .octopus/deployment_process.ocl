@@ -5,12 +5,14 @@ step "Upgrade a Helm Chart" {
 
     action {
         action_type = "Octopus.HelmChartUpgrade"
+        is_required = true
         properties = {
             Octopus.Action.Helm.ClientVersion = "V3"
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Helm Hashicorp"
             Octopus.Action.Package.PackageId = "vault"
+            Octopus.Action.RunOnServer = "false"
         }
         worker_pool_variable = ""
 
