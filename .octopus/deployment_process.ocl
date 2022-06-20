@@ -8,6 +8,8 @@ step "Upgrade a Helm Chart" {
         is_required = true
         properties = {
             Octopus.Action.Helm.ClientVersion = "V3"
+            Octopus.Action.Helm.Namespace = "#{Octopus.Deployment.Tenant.Name | ToLower}-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Helm.ReleaseName = "#{Octopus.Deployment.Tenant.Name | ToLower}-#{Octopus.Environment.Name | ToLower}"
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Helm Hashicorp"
