@@ -7,7 +7,10 @@ step "Create tenant namespace" {
         action_type = "Octopus.KubernetesRunScript"
         properties = {
             Octopus.Action.RunOnServer = "false"
-            Octopus.Action.Script.ScriptBody = "kubectl create namespace $(get_octopusvariable \"Octopus.Deployment.Tenant.Name\")-$(get_octopusvariable \"Octopus.Environment.Name\")"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                echo "Creating Namespace " ${(get_octopusvariable "Octopus.Deployment.Tenant.Name"),,}-${(get_octopusvariable "Octopus.Environment.Name"),,}
+                kubectl create namespace ${(get_octopusvariable "Octopus.Deployment.Tenant.Name"),,}-${(get_octopusvariable "Octopus.Environment.Name"),,}
+            EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
         }
